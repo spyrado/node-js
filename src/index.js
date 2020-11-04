@@ -25,9 +25,13 @@ function validateProjectId(request, response, next) {
   if(!isUuid(id)) {
     return response.status(400).json({ error: 'Invalid project ID.' });
   }
+  // se for um id válido eu deixo o fluxo seguir e dou um next.
+  return next();
 }
 //usando o middleware de logs customizado.
 app.use(logRequests);
+//aqui eu digo que para esse rota, usar esse middleware, e se eu quiser posso adicionar mais de um.
+app.use('/projects/:id', validateProjectId);
 
 let projects = [];
 
