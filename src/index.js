@@ -5,9 +5,22 @@ const app = express();
 
 app.use(express.json());
 
+/**
+ * middleware que loga o metodo utilizado e a rota, para cada requisição feita,
+ * o middleware ele intercepta a requisicao e pode altera-la e OU travalá. 
+ */
+function logRequests(request, response, next) {
+  const { method, url } = request;
+  const logLabel = `[${method.toUpperCase()}] ${url}`;
+  console.log(logLabel);
+  return next();
+}
+//usando o middleware de logs customizado.
+// app.use(logRequests);
+
 let projects = [];
 
-app.get('/projects', (request, response) => {
+app.get('/projects', logRequests, (request, response) => {
   const { title } = request.query;
   const results = title
     ? projects.filter(project => project.title.includes(title))
